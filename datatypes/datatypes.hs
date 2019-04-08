@@ -87,3 +87,47 @@ tuple3 _ = nothing
 tuple4 (Tuple4 a b c d) = just d
 tuple4 _ = nothing
 
+-- Estrutura de dados recursivas
+{-
+Onde o valor de um tipo contém valores daquele tipo, que por sua vez contém mais 
+valores do mesmo tipo, e assim por diante.
+[5]. Isso é apenas açúcar sintático para 5:[]. Do lado esquerdo do :, há um valor e do lado direito, 
+há uma lista. E neste caso, há uma lista vazia. E agora sobre a lista [4,5]? 
+Bem, isso é desaçucarado para 4:(5:[]). 
+-}
+
+data MyList a = Nil | Cons a (MyList a) deriving (Eq, Show)
+-- ou
+infixr 5 :-
+data List a = Empty | a :- List a deriving (Eq, Show)
+
+-- Criando uma função que junta duas das nossas listas em uma. 
+-- Assim é como ++ é definida para listas normais: 
+
+infixr 5 -+-
+(-+-) ::List a -> List a -> List a
+Empty -+- ys = ys 
+(x:-xs) -+- ys = x :- (xs -+- ys)
+
+{-
+Write functions listHead, listTail, listFoldl and listFoldr which are equivalent to their 
+Prelude twins, but function on our List datatype.
+-}
+
+listHead Empty = error "Empty list"
+listHead (x:-xs) = x
+
+listTail Empty = error "Empty list"
+listTail (x:-xs) = xs
+
+listFoldr p v Empty = v
+listFoldr p v (x:-xs) = p x (listFoldr p v xs)
+
+listFoldl p v Empty = v
+listFoldl p v (x:-xs) = listFoldl p (p v x) xs 
+
+-- árvore de busca binária. 
+data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show, Eq)
+-- constroi um no sem arvores a esquerna e direita
+singleton :: a -> Tree a
+singleton x = Node x EmptyTree EmptyTree
