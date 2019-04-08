@@ -36,3 +36,54 @@ containing the last two elements.
 data Quadruple a b = Quadruple a a b b deriving(Eq, Show)
 firstTwo (Quadruple a b c d) = [a,b]
 secondTwo (Quadruple a b c d) = [c,d]
+
+{-
+uma função que move uma figura. Recebe uma figura, o tanto a se mover no eixo x e no eixo y 
+para retornar uma nova figura de mesmas dimensões, localizada em outra posição.
+-}
+
+nudge :: Shape -> Float -> Float -> Shape  
+nudge (Circle (Point x y) r) a b = Circle (Point (x+a) (y+b)) r  
+nudge (Rectangle (Point x1 y1) (Point x2 y2)) a b = Rectangle (Point (x1+a) (y1+b)) (Point (x2+a) (y2+b)) 
+
+-- Tipos paramêtricos
+just = Prelude.Just
+nothing = Prelude.Nothing
+
+data Maybe a = Nothing | Just a
+
+
+firstElement :: [a] -> Prelude.Maybe a
+firstElement [] = nothing
+firstElement (x:xs) = just x
+
+findElement p [] = nothing
+findElement p (x:xs) = if p x then just x else findElement p xs
+
+
+{-
+Write a datatype Tuple which can hold one, two, three or four elements, depending on the constructor 
+(that is, there should be four constructors, one for each number of arguments). Also provide
+functions tuple1 through tuple4 which take a tuple and return Just the value in that position, 
+or Nothing if the number is invalid (i.e., you ask for the tuple4 on a tuple holding only two elements).
+-}
+
+data Tuple a b c d = Tuple1 a | Tuple2 a b | Tuple3 a b c | Tuple4 a b c d deriving (Eq, Show)
+
+tuple1 (Tuple1 a) =  just a
+tuple1 (Tuple2 a b) = just a
+tuple1 (Tuple3 a b c) = just a
+tuple1 (Tuple4 a b c d) = just a
+
+tuple2 (Tuple2 a b) = just b  
+tuple2 (Tuple3 a b c) = just b
+tuple2 (Tuple4 a b c d) = just b 
+tuple2 _ = nothing 
+
+tuple3 (Tuple3 a b c) = just c
+tuple3 (Tuple4 a b c d) = just c 
+tuple3 _ = nothing
+
+tuple4 (Tuple4 a b c d) = just d
+tuple4 _ = nothing
+
