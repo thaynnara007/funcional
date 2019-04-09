@@ -131,3 +131,4 @@ data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show, Eq)
 -- constroi um no sem arvores a esquerna e direita
 singleton :: a -> Tree a
 singleton x = Node x EmptyTree EmptyTree
+  

@@ -65,11 +65,33 @@ data BinaryTree a = NIL | Node a (BinaryTree a) (BinaryTree a)
 sizeBST NIL = 0
 sizeBST (Node a left right) = 1 + sizeBST left + sizeBST right
 
+getNode (Node a left right) = a
+
 --verifica se uma BT é uma BST
-isBST = undefined
+isBST NIL = True
+isBST (Node a NIL NIL) = True
+isBST (Node a left NIL)
+    | a > (getNode left) = isBST left
+    | otherwise = False
+isBST (Node a NIL right)
+    | a < (getNode right) = isBST right
+    | otherwise = False
+isBST (Node a left right)
+    | ( a > nodeLeft && a < nodeRight) = (isBST left) && (isBST right )
+    | otherwise = False
+    where
+        nodeLeft = getNode left
+        nodeRight = getNode right
 
 --insere uma nova chave na BST retornando a BST modificada
-insert = undefined
+singleton :: a -> BinaryTree a
+singleton a = Node a NIL NIL
+
+insert elemento NIL = singleton elemento
+insert elemento (Node a left right)
+    | elemento < a = Node a (insert elemento left) right
+    | elemento > a = Node a left (insert elemento right)
+    | otherwise = Node a left right
 
 --retorna o Node da BST contendo o dado procurado ou entao NIL
 search = undefined
