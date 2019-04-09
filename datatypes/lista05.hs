@@ -111,10 +111,18 @@ minimo (Node a NIL right) = a
 minimo (Node a left right) = minimo left
 
 --retorna o predecessor de um elemento da BST, caso o elemento esteja na BST
-predecessor = undefined
+predecessor elemento NIL = error "element is not in tree"
+predecessor elemento (Node a left right)
+    | elemento < a = predecessor elemento left
+    | elemento > a = predecessor elemento right
+    | otherwise = maximo left
 
 --retorna o sucessor de um elemento da BST, caso o elemento esteja na BST
-successor = undefined
+sucessor elemento NIL = error "element is not in tree"
+sucessor elemento (Node a left right)
+    | elemento < a = sucessor elemento left
+    | elemento > a = sucessor elemento right
+    | otherwise = minimo right
 
 --remove ume lemento da BST
 remove = undefined
