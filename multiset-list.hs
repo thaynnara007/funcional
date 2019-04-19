@@ -22,14 +22,14 @@ get_amount (Bag list1 list2) = list2
 insert_num elem [] = [elem]
 insert_num elem (x:xs) = x:(insert_num elem xs)
 
-change_amount 0 (x:xs) = (x+1):xs
-change_amount index (x:xs) = x:(change_amount (index-1) xs) 
+change_amount 0 amount (x:xs) = (x+amount):xs
+change_amount index amount (x:xs) = x:(change_amount (index-1) amount xs) 
 {-
  - Insere um elemento na estrutura. Caso o elemento ja existe, sua quantidade na estrutura sera incrementada.
  -}
 insert_bag elem (Bag list1 list2)
   | index == Nothing = Bag newList1 newList2
-  | otherwise = Bag list1 (change_amount (from_just index) list2)
+  | otherwise = Bag list1 (change_amount (from_just index) 1 list2)
   where
     index = elemIndex elem list1
     newList1 = insert_num elem list1
@@ -39,7 +39,25 @@ insert_bag elem (Bag list1 list2)
 - Remove um elemento da estrutura, levando em consideracao a manipulacao de sua quantidade na estrutura. 
 - Caso a quantidade atinja 0 (ou menos), o elemento deve realmente ser removido da estrutura
 -}
-remove elem bag = undefined
+remove_num elem (x:xs)
+    | elem == x = xs
+    | otherwise = x:(remove_num elem xs)
+
+remove_amount 0 (x:xs) = xs
+remove_amount index (x:xs) = x:(remove_amount (index-1) xs)
+
+remove_bag elem (Bag list1 list2) 
+  | index_num == Nothing = error "Esse elemento não existe na bag"
+  | amount == 1 = Bag new_list1 new_list2
+  | otherwise = Bag list1 (change_amount i (-1) list2)
+  where
+    index_num = elemIndex elem list1
+    i = from_just index_num
+    amount = list2 !! i
+    new_list1 = remove_num elem list1
+    new_list2 = remove_amount i list2
+  
+  
 
 {-
  - Busca um elemento na estrutura retornando sua quantidade. Caso o elemento nao exista, retorna 0 como a quantidade.
