@@ -137,8 +137,13 @@ minus_bags (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2) = Bag new_list1 new_l
  - Testa se este Bag esta incluso em otherBag. Para todo elemento deste bag, sua quantidade
  - deve ser menor or igual a sua quantidade em otherBag.
 -}
-inclusion bag1 bag2 = undefined
-
+inclusion (Bag [] list2_b1) (Bag list1_b2 list2_b2) = True
+inclusion (Bag (x:xs) list2_b1) (Bag list1_b2 list2_b2) 
+        | elem x list1_b2 = if (amount_b1 <= amount_b2) then inclusion (Bag xs list2_b1) (Bag list1_b2 list2_b2) else False
+        | otherwise = False
+        where
+          amount_b1 = search x (Bag (x:xs) list2_b1)
+          amount_b2 = search x (Bag list1_b2 list2_b2)
 {-
  - Realiza a soma deste Bag com otherBag. A soma de dois bags contem os elementos dos dois bags com suas quantidades somadas. 
 -}
