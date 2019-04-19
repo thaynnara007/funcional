@@ -57,18 +57,36 @@ remove_bag elem (Bag list1 list2)
     new_list1 = remove_num elem list1
     new_list2 = remove_amount i list2
   
-  
-
 {-
  - Busca um elemento na estrutura retornando sua quantidade. Caso o elemento nao exista, retorna 0 como a quantidade.
 -}
-search elem bag = undefined
+search elem (Bag list1 list2) 
+    | index == Nothing = error "Esse elemento não existe na bag"
+    | otherwise = list2 !! i
+    where
+      index = elemIndex elem list1
+      i = from_just index
 
 {-
  - Faz a uniao deste Bag com otherBag. A uniao consiste em ter os elementos dos dois Bags com suas maiores quantidades.
  - Por exemplo, A = {(a,1),(c,3)}, B = {(b,2),(c,1)}. A.union(B) deixa A = {(a,1),(c,3),(b,2)}
 -}
-union bag1 bag2 = undefined
+union_amount [] (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2) = []
+union_amount (x:xs) (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2)
+      | index_b1 == Nothing = amount_b2:(union_amount xs (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2))
+      | index_b2 == Nothing = amount_b1:(union_amount xs (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2))
+      | otherwise = (max amount_b1 amount_b2):(union_amount xs (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2))
+      where
+        index_b1 = elemIndex x list1_b1
+        index_b2 = elemIndex x list1_b2
+        amount_b1 = list2_b1 !! (from_just index_b1)
+        amount_b2 = list2_b2 !! (from_just index_b2)
+
+union_bags (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2) = Bag new_list1 new_list2
+        where
+          new_list1 = list1_b1 `union` list1_b2
+          new_list2 = union_amount new_list1 (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2)
+
 
 {-
  - Faz a intersecao deste Bag com otherBag. A intersecao consiste em ter os elementos que estao em ambos os bags com suas 
