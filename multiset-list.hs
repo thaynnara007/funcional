@@ -87,7 +87,6 @@ union_bags (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2) = Bag new_list1 new_l
           new_list1 = list1_b1 `union` list1_b2
           new_list2 = union_amount new_list1 (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2)
 
-
 {-
  - Faz a intersecao deste Bag com otherBag. A intersecao consiste em ter os elementos que estao em ambos os bags com suas 
  - menores quantidades. Por exemplo, Seja A = {(a,3),(b,1)} e B = {(a,1)}. Assim, A.intersection(B) deixa A = {(a,1)}
@@ -111,8 +110,29 @@ intersection_bags (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2) = Bag new_list
      Caso essa quantidade seja negativa o elemento deve serremovido do Bag. 
      Por exemplo, seja A = {(a,3),(b,1)} e B = {(b,2),(a,1)}. Assim, A.minus(B) deixa A = {(a,2)}.
 -}
-minus bag1 bag2 = undefined
+minus_nums [] (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2) = []
+minus_nums (x:xs) (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2)
+      | index_b2 == Nothing = amount_b1:(minus_nums xs (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2))
+      | otherwise = if (result > 0) then x:(minus_nums xs (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2)) else (minus_nums xs (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2))
+      where
+        index_b2 = elemIndex x list2_b2
+        amount_b1 = search x (Bag list1_b1 list2_b1)
+        amount_b2 = list2_b2 !! (from_just index_b2)
+        result = (amount_b1-amount_b2)
+        
+minus_amount [] (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2) = []
+minus_amount (x:xs) (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2) =
+  result:(minus_amount xs (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2)) 
+        where
+          index_b2 = elemIndex x list2_b2
+          amount_b1 = search x (Bag list1_b1 list2_b1)
+          amount_b2 = list2_b2 !! (from_just index_b2)
+          result = (amount_b1-amount_b2)
 
+minus_bags (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2) = Bag new_list1 new_list2
+      where
+        new_list1 = minus_nums list1_b1 (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2)
+        new_list2 = minus_amount new_list1 (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2)
 {-
  - Testa se este Bag esta incluso em otherBag. Para todo elemento deste bag, sua quantidade
  - deve ser menor or igual a sua quantidade em otherBag.
