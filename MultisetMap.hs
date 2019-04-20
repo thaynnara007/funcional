@@ -1,4 +1,14 @@
-module MultisetMap ()
+module MultisetMap (
+  insert_bag,
+  remove_bag,
+  search_bag,
+  union_bag,
+  intersection_bag,
+  minus,
+  inclusion,
+  sum_bag,
+  size_bag
+)
  where
 
 {- 
@@ -70,7 +80,7 @@ minus bag1 bag2 = Map.differenceWith f bag1 bag2
  - Testa se este Bag esta incluso em otherBag. Para todo elemento deste bag, sua quantidade
  - deve ser menor or igual a sua quantidade em otherBag.
 -}
---inclusion bag1 bag2 = undefined
+inclusion bag1 bag2 = Map.isSubmapOfBy (<=) bag1 bag2
 
 {-
  - Realiza a soma deste Bag com otherBag. A soma de dois bags contem os elementos dos dois bags com suas quantidades somadas. 
