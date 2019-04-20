@@ -27,12 +27,18 @@ insert_bag elem bag
 - Remove um elemento da estrutura, levando em consideracao a manipulacao de sua quantidade na estrutura. 
 - Caso a quantidade atinja 0 (ou menos), o elemento deve realmente ser removido da estrutura
 -}
---remove elem bag = undefined
+remove_bag elem bag 
+    | a == Nothing = error "Esse elemento não esta na bag"
+    | amount == 0 = Map.delete elem bag 
+    | otherwise = insert elem amount bag
+    where
+      a = Map.lookup elem bag
+      amount = (from_just a) - 1
 
 {-
  - Busca um elemento na estrutura retornando sua quantidade. Caso o elemento nao exista, retorna 0 como a quantidade.
 -}
---search elem bag = undefined
+search_bag elem bag = Map.lookup elem bag
 
 {-
  - Faz a uniao deste Bag com otherBag. A uniao consiste em ter os elementos dos dois Bags com suas maiores quantidades.
