@@ -147,9 +147,22 @@ inclusion (Bag (x:xs) list2_b1) (Bag list1_b2 list2_b2)
 {-
  - Realiza a soma deste Bag com otherBag. A soma de dois bags contem os elementos dos dois bags com suas quantidades somadas. 
 -}
-sum bag1 bag2 = undefined
+sum_amount [] (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2) = []
+sum_amount (x:xs) (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2)
+      | index_b1 == Nothing = amount_b2:(sum_amount xs (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2))
+      | index_b2 == Nothing = amount_b1:(sum_amount xs (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2))
+      | otherwise = (amount_b1 + amount_b2):(sum_amount xs (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2))
+      where
+        index_b1 = elemIndex x list1_b1
+        index_b2 = elemIndex x list1_b2
+        amount_b1 = list2_b1 !! (from_just index_b1)
+        amount_b2 = list2_b2 !! (from_just index_b2)
 
+sum_bags (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2) = Bag new_list1 new_list2
+  where
+    new_list1 = list1_b1 `union` list1_b2
+    new_list2 = sum_amount new_list1 (Bag list1_b1 list2_b1) (Bag list1_b2 list2_b2)
 {-
  - Retorna a quantidade total de elementos no Bag
 -}
-size bag = undefined
+size (Bag list1 list2) = length list1 
