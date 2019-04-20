@@ -1,4 +1,15 @@
-module MultisetList ()
+module MultisetList (
+  Bag(Bag),
+  insert_bag,
+  remove_bag,
+  search,
+  union_bags,
+  intersection_bags,
+  minus_bags,
+  inclusion,
+  sum_bags,
+  size
+)
  where
 
 {- 
