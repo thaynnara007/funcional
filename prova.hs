@@ -36,4 +36,21 @@ my_deep e (Node a left rigth)
     | otherwise = 0
 
 deep e bst = if (search_bst e bst) then my_deep e bst else -1
+
+leaves NIL = []
+leaves (Node a NIL NIL) = [a]
+leaves (Node a left right) = (leaves left) ++ (leaves right)
+
+mirror (Node a NIL NIL) = Node a NIL NIL
+mirror (Node a left NIL) = Node a NIL (mirror left)
+mirror (Node a NIL right) = Node a (mirror right) NIL
+mirror (Node a left right) = Node a new_left new_right
+    where
+      new_left = mirror right
+      new_right = mirror left
+
+mapTree f (Node a NIL NIL) = Node (f a) NIL NIL
+mapTree f (Node a left NIL) = Node (f a) (mapTree f left) NIL
+mapTree f (Node a NIL right) = Node (f a) NIL (mapTree f right)
+mapTree f (Node a left right) = Node (f a) (mapTree f left) (mapTree f right)
           
