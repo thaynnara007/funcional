@@ -51,6 +51,10 @@ isPalindrome (x:xs)
 compress [] = []
 compress xs = [e | e <- [head xs], not (elem e (tail xs))] ++ (compress (tail xs))
 
+dif x y = if x == y then False else True
+compres [] = []
+compres (x:xs) = x:(compres (filter (dif x) xs))
+
 {-
 - Varre a lista da esquerda para a direita e junta os elementos iguais. Ex: compact [2,5,8,2,1,8] = [2,2,5,8,8,1]
 - Voce pode usar funcoes sobre listas como : (cons), filter, etc.
@@ -89,6 +93,8 @@ insertAt el pos (x:xs) = [x] ++ (insertAt el (pos -1) xs)
 - Ordena uma lista em ordem crescente. Voce deve seguir a ideia do selectionsort onde os elementos 
 - menores sao trazidos para o inicio da lista um a um. Esta funcao ja esta implementada.
 -}
+min_list xs = foldr min 0 xs
+
 minList [x] = x
 minList (x:xs) = if (x < (minList xs)) then x else minList xs
 

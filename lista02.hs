@@ -20,6 +20,10 @@ somatorio a b = sum[a..b]
 somatorioRec _ 0 = 0
 somatorioRec a b = a + (somatorioRec (a+1) (b-1))
 
+sumRec a b
+    | a == b = b
+    | otherwise = a + (sumRec (a+1) b)
+
 -- Defina a funcao que eleva um membro ao quadrado
 square x = x * x 
 

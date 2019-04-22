@@ -17,7 +17,7 @@ square x = x*x
 -}
 pow x 1 = x
 pow x y 
-	| y > 0 = x * pow x (y-1)
+    | y > 0 = x * pow x (y-1)
 	| otherwise = 1/(pow x (-y))
 {-
     versao 2 da funçao potencia, exponenciacao rapida   
