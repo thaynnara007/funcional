@@ -41,3 +41,69 @@ instance Equal TrafficLight where
   isEqual Green Green = True
   isEqual Yellow Yellow = True
   isEqual _ _ = False
+
+--  typeclasses que são subclasses de outras typeclasses
+data List a = Nil | Cons a (List a)
+
+instance (Eq a) => Eq(List a) where
+  Nil == Nil = True
+  (Cons x xs) == (Cons y ys) = (x == y) && (xs == ys)
+  _==_ = False
+
+class (Eq a, Show a) => Num a where
+  (+), (-), (*) :: a -> a -> a 
+  negate :: a -> a
+  abs :: a -> a
+  fromInteger :: Integer -> a
+
+class YesNo a where 
+  yesno :: a -> Bool
+
+instance YesNo Int where
+  yesno 0 = False
+  yesno _ = True
+
+instance YesNo [a] where
+  yesno [] = False
+  yesno _ = True
+
+instance YesNo Bool where
+  yesno = id
+
+instance YesNo (Maybe a) where
+  yesno (Just _ ) = True
+  yesno Nothing = False
+
+data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving Show
+
+instance YesNo (Tree a) where
+  yesno EmptyTree = False
+  yesno _ = True
+
+instance YesNo TrafficLight where
+  yesno Red = False
+  yesno _ = True
+
+myIf :: (YesNo y) => y -> a -> a -> a
+myIf yesNoValue yesResult noResult = if yesno yesNoValue then yesResult else noResult
+
+{-
+o f não é um tipo concreto (um tipo que um valor pode ter, como Int, Bool ou Maybe String), 
+mas sim um construtor de tipos que pegue um parâmetro de tipo, como Maybe Int é um tipo concreto, 
+mas Maybe é um construtor de tipo que pega um tipo como parâmetro. O fmap pega uma função de um tipo 
+para outro e um functor aplicado em um tipo e retorna um functor aplicado ao outro tipo.
+-}
+
+class Functor f where
+  fmap :: (a -> b) -> f a -> f b
+
+instance Main.Functor [] where
+  fmap = map
+
+instance Main.Functor Maybe where
+  fmap f (Just x) = Just (f x)
+  fmap f Nothing = Nothing
+
+instance Main.Functor Tree where
+  fmap f EmptyTree = EmptyTree
+  fmap f (Node a left right) = Node (f a) (Main.fmap f left) (Main.fmap f right)
