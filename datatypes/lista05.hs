@@ -60,7 +60,7 @@ listFoldl f v (Cons x xs) = listFoldl f (f v x) xs
 
 --Escreva as funcoes sobre a estrutura de dados binary tree
 data BinaryTree a = NIL | Node a (BinaryTree a) (BinaryTree a)
- deriving (Eq,Show)
+ deriving (Eq,Show, Ord, Read)
 
 sizeBST NIL = 0
 sizeBST (Node a left right) = 1 + sizeBST left + sizeBST right
@@ -125,9 +125,32 @@ sucessor elemento (Node a left right)
     | otherwise = minimo right
 
 --remove ume lemento da BST
-remove = undefined
+remove el NIL = NIL
+remove el (Node a NIL NIL) = if a == el then NIL else singleton a
+remove el (Node a left NIL)
+          | el < a = Node a (remove el left) NIL
+          | el > a = NIL
+          | otherwise = Node rootLeft (remove rootLeft left) NIL
+          where
+            rootLeft = getNode left
+
+remove el (Node a left right)
+          | el < a = Node a (remove el left) right
+          | el > a = Node a left (remove el right)
+          | otherwise = Node rootRight left (remove rootRight right)
+          where
+              rootRight = getNode right
+
+makeBST [] = NIL
+makeBST [x] = singleton x
+makeBST xs = foldr insert NIL xs
 
 --retorna uma lista com os dados da BST nos diversos tipos de caminhamento
-preOrder = undefined
-order = undefined
-postOrder = undefined
+preOrder NIL = []
+preOrder (Node a left right) = [a] ++ (preOrder left) ++ (preOrder right)
+
+order NIL = []
+order (Node a left right) = (order left) ++ [a] ++ (order right)
+
+postOrder NIL = []
+postOrder (Node a left right) = (postOrder left) ++ (postOrder right) ++ [a]
